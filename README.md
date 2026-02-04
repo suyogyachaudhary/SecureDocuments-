@@ -1,5 +1,8 @@
 # SecureDocuments - PKI File Signing & Encryption 🛡️
 
+[![CI](https://github.com/suyogyachaudhary/SecureDocuments-/actions/workflows/ci.yml/badge.svg?branch=developer)](https://github.com/suyogyachaudhary/SecureDocuments-/actions/workflows/ci.yml)
+[![CD](https://github.com/suyogyachaudhary/SecureDocuments-/actions/workflows/cd.yml/badge.svg)](https://github.com/suyogyachaudhary/SecureDocuments-/actions/workflows/cd.yml)
+
 A simple local desktop application that demonstrates basic PKI-based user management, document signing and verification, file encryption, and secure credential storage. Built with Python and Tkinter for educational and prototype purposes.
 
 ## Features
