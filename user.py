@@ -4,12 +4,13 @@ from ca import issue_certificate, verify_certificate
 from database import add_user, get_user
 from security_utils import sign_data
 
-def register_user(username):
+def register_user(username, password=None):
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     public_key = private_key.public_key()
 
     cert = issue_certificate(username, public_key)
-    add_user(username, cert)
+    # if password provided, it will be stored securely in DB
+    add_user(username, cert, password=password)
 
     with open(f"{username}_private.pem", "wb") as f:
         f.write(private_key.private_bytes(
