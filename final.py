@@ -524,7 +524,37 @@ def show_login_and_launch():
         PKIApp(root, current_user=user, is_admin=is_admin)
 
     login_btn = tk.Button(frm, text="Login 🔐", command=attempt_login, bg="#2e7d32", fg="#ffffff", padx=12, pady=8, font=(None,10,'bold'))
-    login_btn.pack(pady=12)
+    login_btn.pack(pady=6)
+
+    # registration option
+    def attempt_register():
+        username = simpledialog.askstring("Register", "Choose a username:")
+        if not username:
+            return
+        password = simpledialog.askstring("Register", "Choose a password:", show='*')
+        if not password:
+            messagebox.showwarning("Missing", "Password required")
+            return
+        confirm = simpledialog.askstring("Register", "Confirm password:", show='*')
+        if password != confirm:
+            messagebox.showerror("Mismatch", "Passwords do not match")
+            return
+        # create key pair and certificate
+        private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        public_key = private_key.public_key()
+        cert = issue_certificate(username, public_key)
+        add_user(username, cert, password=password)
+        os.makedirs("users", exist_ok=True)
+        with open(f"users/{username}.pem", "wb") as f:
+            f.write(private_key.private_bytes(
+                serialization.Encoding.PEM,
+                serialization.PrivateFormat.TraditionalOpenSSL,
+                serialization.NoEncryption()
+            ))
+        messagebox.showinfo("Registered", "User created; you may now login")
+
+    reg_btn = tk.Button(frm, text="Register ➕", command=attempt_register, bg="#42a5f5", fg="#ffffff", padx=12, pady=8, font=(None,10,'bold'))
+    reg_btn.pack(pady=6)
 
     root.mainloop()
 

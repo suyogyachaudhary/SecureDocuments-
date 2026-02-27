@@ -88,8 +88,28 @@ def admin_force_change_password(username, new_password):
     return True
 
 def create_default_admin(password="admin123"):
+    # ensure an admin record exists with a usable password
     row = get_user_full('admin')
     if row:
+        # row is (certificate, revoked, password_hash, salt, is_admin, must_change)
+        _, revoked, pw_hash, salt, is_admin, must_change = row
+        # if user is revoked we don't touch it; otherwise repair
+        if not revoked:
+            updates = []
+            params = []
+            if not is_admin:
+                updates.append("is_admin=1")
+            if pw_hash is None or salt is None:
+                # set the provided default and force change next login
+                salt, pw_hash = hash_password(password)
+                updates.append("password_hash=?")
+                params.append(pw_hash)
+                updates.append("salt=?")
+                params.append(salt)
+                updates.append("must_change=1")
+            if updates:
+                cursor.execute(f"UPDATE users SET {', '.join(updates)} WHERE username='admin'", params)
+                conn.commit()
         return
     # set must_change=1 to force password change on first login
     add_user('admin', cert=None, password=password, is_admin=1, must_change=1)

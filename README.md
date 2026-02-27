@@ -7,6 +7,7 @@ A simple local desktop application that demonstrates basic PKI-based user manage
 
 ## Features
 - Login landing page with default admin account (must change on first login)
+- **Register new users from login screen** (username + password + certificate)
 - Admin: add users (username + password) and reset passwords
 - Register users (certificate issuance) and store private key locally
 - Sign and verify documents using RSA keys and X.509 certificates
@@ -18,6 +19,9 @@ A simple local desktop application that demonstrates basic PKI-based user manage
 Prerequisites:
 - Python 3.8+ (3.13 tested)
 - Install dependencies:
+
+> **Note:** legacy helper scripts (`main.py`, `seecurefile.py`, `user.py`, `document.py`, `test_cases.py`) and build artifacts have been removed. The only entry point now is `final.py`.
+
 
 ```bash
 python -m pip install -r requirements.txt
